@@ -95,7 +95,9 @@ for(let i = 0; i < horizontalBlocks; i++) {
             targetElement.firstChild.remove();
             targetElement.classList.remove("row_animation");
             pushRowElement(true);
-            window.requestAnimationFrame(() => targetElement.classList.add("row_animation"));
+            window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(() => targetElement.classList.add("row_animation"));
+            });
         }
     });
     pileBlockArea.appendChild(blockImage);
