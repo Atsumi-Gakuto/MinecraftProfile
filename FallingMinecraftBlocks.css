@@ -1,0 +1,11 @@
+img {
+    image-rendering: pixelated;
+}
+body > div:first-child {
+    display: flex;
+    flex-direction: column-reverse;
+}
+body > div:first-child > div {
+    display: flex;
+    flex-direction: row-reverse;
+}
