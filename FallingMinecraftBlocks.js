@@ -22,7 +22,7 @@ const blockSizeMultiplayer = 4;
  * 既に積み上がっているブロックの段数。0より大きく"verticalBlocks"より小さい値が推奨。
  * @type {null}
  */
-const blockStackLevel = 5;
+const blockStackLevel = 9;
 
 /**
  * アニメーション速度の倍率

@@ -14,7 +14,6 @@ img {
 #falling_block_animation_area {
     display: flex;
     flex-direction: column-reverse;
-    overflow: hidden;
 }
 .row_animation {
     animation: row_down var(--row_animation_speed) linear forwards;
