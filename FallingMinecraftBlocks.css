@@ -10,6 +10,8 @@ img {
 }
 #falling_block_area {
     overflow-y: hidden;
+    user-select: none;
+    pointer-events: none;
 }
 #falling_block_animation_area {
     display: flex;
