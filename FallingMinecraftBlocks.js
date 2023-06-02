@@ -41,34 +41,64 @@ const images = ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8
 /**
  * ブロック列の要素を挿入する。
  * @param {number} lifeCount 列を消去するまでのカウント
+ * @param {bool} pushLast2nd true -> 最後から2番目に挿入する, false -> 最後に挿入する
  * @returns {HTMLDivElement} 挿入された列のhtml要素
  */
-function pushRowElement(lifeCount) {
+function pushRowElement(pushLast2nd) {
     const blockRow = document.createElement("div");
     blockRow.style.width = `${horizontalBlocks * 16 * blockSizeMultiplayer}px`;
     blockRow.style.height = `${16 * blockSizeMultiplayer}px`;
-    let rowLifeCount = lifeCount;
-    blockRow.addEventListener("animationiteration", () => {
-        if(--rowLifeCount == blockStackLevel) pushRowElement(blockStackLevel + 1);
-        else if(rowLifeCount == 0) blockRow.remove();
-    });
-    targetElement.appendChild(blockRow);
+    if(pushLast2nd) targetElement.lastChild.before(blockRow);
+    else targetElement.appendChild(blockRow);
     return blockRow;
 }
 
+/**
+ * ブロック画像の要素を生成する。
+ * @oarams {bool} setSrc 画像のソースを設定するかどうか
+ * @returns {HTMLImageElement} 生成されたブロック画像の要素
+ */
+function generateBlockImage(setSrc) {
+    const blockImage = document.createElement("img");
+    if(setSrc) blockImage.src = images[Math.floor(Math.random() * images.length)];
+    blockImage.style.width = blockImage.style.height = `${16 * blockSizeMultiplayer}px`;
+    return blockImage;
+}
+
 //初期処理
-document.documentElement.style.setProperty("--row_animation_speed", `${7 / animationSpeedMultiplayer}s`);
-const targetElement = document.querySelector("body > :first-child");
+const cssVariables = {"--horizontal_blocks": horizontalBlocks, "--vertical_blocks": verticalBlocks, "--block_stack_level": blockStackLevel, "--block_size": `${16 * blockSizeMultiplayer}px`, "--row_animation_speed": `${verticalBlocks / animationSpeedMultiplayer}s`};
+Object.keys(cssVariables).forEach((key) => document.documentElement.style.setProperty(key, cssVariables[key]));
+const targetElement = document.getElementById("falling_block_animation_area")
 targetElement.style.width = `${horizontalBlocks * 16 * blockSizeMultiplayer}px`;
 targetElement.style.height = `${verticalBlocks * 16 * blockSizeMultiplayer}px`;
 for(let i = 0; i < blockStackLevel + 1; i++) {
-    const blockRow = pushRowElement(i + 1);
+    const blockRow = pushRowElement(false);
     if(i < blockStackLevel) {
-        for(let j = 0; j < horizontalBlocks; j++) {
-            const blockImage = document.createElement("img");
-            blockImage.src = images[Math.floor(Math.random() * images.length)];
-            blockImage.style.width = blockImage.style.height = `${16 * blockSizeMultiplayer}px`;
-            blockRow.appendChild(blockImage);
-        }
+        for(let j = 0; j < horizontalBlocks; j++) blockRow.appendChild(generateBlockImage(true));
     }
 }
+const pileBlockArea = document.createElement("div");
+pileBlockArea.id = "pile_block_area";
+pileBlockArea.style.width = `${horizontalBlocks * 16 * blockSizeMultiplayer}px`;
+pileBlockArea.style.height = `${(verticalBlocks - blockStackLevel + 1) * 16 * blockSizeMultiplayer}px`;
+for(let i = 0; i < horizontalBlocks; i++) {
+    const blockImage = generateBlockImage(true);
+    if(i == 0) blockImage.classList.add("pile_block");
+    blockImage.addEventListener("animationend", () => {
+        const blockImageNewRow = generateBlockImage(false);
+        blockImageNewRow.src = pileBlockArea.children.item(i).src;
+        targetElement.children.item(blockStackLevel).appendChild(blockImageNewRow);
+        blockImage.classList.remove("pile_block");
+        const nextBlock = pileBlockArea.children.item((i + 1) % horizontalBlocks);
+        nextBlock.src = images[Math.floor(Math.random() * images.length)];
+        nextBlock.classList.add("pile_block");
+        if(i == horizontalBlocks - 1) {
+            targetElement.firstChild.remove();
+            targetElement.classList.remove("row_animation");
+            pushRowElement(true);
+            window.requestAnimationFrame(() => targetElement.classList.add("row_animation"));
+        }
+    });
+    pileBlockArea.appendChild(blockImage);
+}
+targetElement.appendChild(pileBlockArea);

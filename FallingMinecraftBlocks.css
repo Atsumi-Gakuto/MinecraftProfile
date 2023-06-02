@@ -1,25 +1,47 @@
 :root {
-    --row_animation_speed: 7s;
+    --horizontal_blocks: unset;
+    --vertical_blocks: unset;
+    --block_stack_level: unset;
+    --block_size: unset;
+    --row_animation_speed: unset;
 }
 img {
     image-rendering: pixelated;
 }
-body > div:first-child {
+#falling_block_area {
+    overflow-y: hidden;
+}
+#falling_block_animation_area {
     display: flex;
     flex-direction: column-reverse;
     overflow: hidden;
 }
-body > div:first-child > div {
+.row_animation {
+    animation: row_down var(--row_animation_speed) linear forwards;
+}
+#falling_block_animation_area > div {
+    flex-shrink: 0;
+}
+.block_row {
     display: flex;
-    flex-direction: row-reverse;
-    animation: row_down var(--row_animation_speed) linear infinite;
+}
+.pile_block {
+    animation: block_down calc(var(--row_animation_speed) / var(--horizontal_blocks)) ease-out;
 }
 
 @keyframes row_down {
     0% {
-        transform: translateY(0%);
+        transform: translateY(0px);
     }
     100% {
-        transform: translateY(100%);
+        transform: translateY(var(--block_size));
+    }
+}
+@keyframes block_down {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(calc(var(--block_size) * (var(--vertical_blocks) - var(--block_stack_level) + 1)));
     }
 }
