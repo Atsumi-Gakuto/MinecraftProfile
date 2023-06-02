@@ -24,6 +24,12 @@ const blockSizeMultiplayer = 4;
  */
 const blockStackLevel = 5;
 
+/**
+ * アニメーション速度の倍率
+ * @type {number}
+ */
+const animationSpeedMultiplayer = 1;
+
 /* -------- 設定用変数エリア 終了 -------- */
 
 /**
@@ -51,6 +57,7 @@ function pushRowElement(lifeCount) {
 }
 
 //初期処理
+document.documentElement.style.setProperty("--row_animation_speed", `${7 / animationSpeedMultiplayer}s`);
 const targetElement = document.querySelector("body > :first-child");
 targetElement.style.width = `${horizontalBlocks * 16 * blockSizeMultiplayer}px`;
 targetElement.style.height = `${verticalBlocks * 16 * blockSizeMultiplayer}px`;

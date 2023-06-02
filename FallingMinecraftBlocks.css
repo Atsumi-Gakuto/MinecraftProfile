@@ -1,3 +1,6 @@
+:root {
+    --row_animation_speed: 7s;
+}
 img {
     image-rendering: pixelated;
 }
@@ -9,7 +12,7 @@ body > div:first-child {
 body > div:first-child > div {
     display: flex;
     flex-direction: row-reverse;
-    animation: row_down 7s linear infinite;
+    animation: row_down var(--row_animation_speed) linear infinite;
 }
 
 @keyframes row_down {
