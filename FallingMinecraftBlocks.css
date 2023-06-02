@@ -4,8 +4,19 @@ img {
 body > div:first-child {
     display: flex;
     flex-direction: column-reverse;
+    overflow: hidden;
 }
 body > div:first-child > div {
     display: flex;
     flex-direction: row-reverse;
+    animation: row_down 7s linear infinite;
+}
+
+@keyframes row_down {
+    0% {
+        transform: translateY(0%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
 }
