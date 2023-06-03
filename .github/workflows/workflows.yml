@@ -3,6 +3,7 @@ name: HTML統合とhtmlのデプロイ
 on:
     push:
         paths:
+            - ".github/workflows/**"
             - "index.html"
             - "FallingMinecraftBlocks.js"
             - "FallingMinecraftBlocks.css"
