@@ -25,7 +25,7 @@ async function packHTML(): Promise<void> {
             });
         }
 
-        if(/<script defer src=".+\.js"><\/script>/.exec(line)) {
+        if(/<script src=".+\.js"><\/script>/.exec(line)) {
             //javascript
             await pushTagSource(/(?<=src=").+\.js(?=")/.exec(line)?.toString() as string, "script", 2);
         }
