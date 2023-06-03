@@ -1,0 +1,52 @@
+name: HTML統合とhtmlのデプロイ
+
+on:
+    push:
+        paths:
+            - "index.html"
+            - "FallingMinecraftBlocks.js"
+            - "FallingMinecraftBlocks.css"
+            - "HTMLPacker.ts"
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+jobs:
+    PackHTML:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Setup Node.js@20.2.0
+              uses: actions/setup-node@v3
+              with:
+                node-version: 20.2.0
+                cache: npm
+            - name: Install dependent npm modules
+              run: npm install
+            - name: Pack HTML
+              run: ./node_modules/.bin/ts-node ./HTMLPacker.ts
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: output.html
+                path: ./output.html
+    DeployPages:
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Setup Pages
+              uses: actions/configure-pages@v3
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v1
+              with:
+                path: "."
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v2
