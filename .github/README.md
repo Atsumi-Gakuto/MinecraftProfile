@@ -1,7 +1,7 @@
 # MinecraftProfile
 研究室の自己紹介用に作ったマインクラフトのブロック装飾の埋め込みhtmlです。
 
-![アニメーションの様子](/README_images/メイン.gif)
+![アニメーションの様子](./README_images/メイン.gif)
 
 **デモページはこちらです。** -> https://atsumi-gakuto.github.io/MinecraftProfile/
 
